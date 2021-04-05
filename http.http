@@ -1,9 +1,8 @@
-POST http://localhost:3003/api/blogs
+POST http://localhost:3003/api/users
 Content-Type: application/json
 
 {
-  "title": "Intial test",
-  "author": "Brandon Lim",
-  "url": "http://localhost/thisisatest",
-  "likes": 32
+  "username": "Branodnlim8890",
+  "name": "dondon lim",
+  "password": "12345678"
 }

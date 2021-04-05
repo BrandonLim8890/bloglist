@@ -1,4 +1,3 @@
-
 const logger = require('./logger')
 
 const requestLogger = (req, res, next) => {
