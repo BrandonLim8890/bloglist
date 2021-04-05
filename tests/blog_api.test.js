@@ -2,7 +2,8 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
 const Blog = require('../models/blog')
-const helper = require('./test_helper')
+const User = require('../models/user')
+const helper = require('./blog_test_helper')
 
 const api = supertest(app)
 
@@ -10,8 +11,10 @@ const api = supertest(app)
 beforeEach(async () => {
   // Clears the database
   await Blog.deleteMany({})
+
+  const user = await User.findOne({})
   // Create an array of promises
-  const blogObjects = helper.initialBlogs.map( blog => new Blog(blog) )
+  const blogObjects = helper.initialBlogs.map( blog => new Blog({ ...blog, user: user.id }) )
   const promiseBlogs = blogObjects.map( blog => blog.save() )
 
   // Oneshot, ensures all the blogs are saved
@@ -21,10 +24,12 @@ beforeEach(async () => {
 })
 
 
-test('blogs are returned as json', async () => {
+test.only('blogs are returned as json', async () => {
   await api.get('/api/blogs')
     .expect(200)
     .expect('Content-Type', /application\/json/)
+
+  console.log( await api.get('/api/blogs') )
 })
 
 test('there are two blogs', async () => {

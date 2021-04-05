@@ -1,8 +1,10 @@
-POST http://localhost:3003/api/users
+POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "username": "Branodnlim8890",
-  "name": "dondon lim",
-  "password": "12345678"
+  "title": "Initial Test",
+  "author": "Brandon Lim",
+  "url": "facebook.com/william",
+  "likes": "21",
+  "user": "606ace60a232c2ad1a14daf6"
 }

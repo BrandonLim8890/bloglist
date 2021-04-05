@@ -4,7 +4,7 @@ require('express-async-errors')
 
 blogRouter.get('/', async (req, res, next) => {
   try {
-    const blogs = await Blog.find({})
+    const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
     res.json(blogs)
   } catch (err) {
     next(err)
@@ -13,7 +13,7 @@ blogRouter.get('/', async (req, res, next) => {
 
 blogRouter.get('/:id', async (req, res, next) => {
   try {
-    const blog = await Blog.findById(req.params.id)
+    const blog = await Blog.findById(req.params.id).populate('user', { username: 1, name: 1 })
     if (blog) {
       res.json(blog)
     } else {

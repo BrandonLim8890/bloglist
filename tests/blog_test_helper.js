@@ -11,7 +11,7 @@ const initialBlogs = [
     title: 'Intial test',
     author: 'Brandon Lim',
     url: 'http://localhost/thisisatest',
-    likes: 32
+    likes: 32,
   }
 ]
 
