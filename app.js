@@ -7,6 +7,7 @@ const logger = require('./utils/logger')
 const blogRouter = require('./controllers/blogController')
 const middleware = require('./utils/middleware')
 const userRouter = require('./controllers/userController')
+const loginRouter = require('./controllers/loginController')
 
 // Initialize connection to mongoose server
 mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true }).then( () => {
@@ -19,6 +20,7 @@ app.use(middleware.requestLogger)
 
 app.use('/api/blogs', blogRouter)
 app.use('/api/users', userRouter)
+app.use('/api/login', loginRouter)
 
 app.use(middleware.unknownEndPoint)
 app.use(middleware.errorHandler)

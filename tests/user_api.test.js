@@ -4,6 +4,7 @@ const supertest = require('supertest')
 const app = require('../app')
 const User = require('../models/user')
 const helper = require('./user_test_helper')
+let token = null
 
 const api = supertest(app)
 
@@ -12,7 +13,7 @@ describe('when there is only one user in the db', () => {
     // Clear the databse
     await User.deleteMany({})
     const user = helper.initialUsers[0]
-    const passwordHash = await bcrypt.hash(user.passwordHash, 10)
+    const passwordHash = await bcrypt.hash(user.password, 10)
     const newUser = new User({ username: user.username, passwordHash })
 
     await newUser.save()
@@ -20,7 +21,7 @@ describe('when there is only one user in the db', () => {
     console.log('Databse Initialised')
   })
 
-  test('users are returned as a json with length 1', async () => {
+  test.only('users are returned as a json with length 1', async () => {
     await api.get('/api/users')
       .expect(200)
       .expect('Content-Type', /application\/json/)

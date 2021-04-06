@@ -4,8 +4,8 @@ const app = require('../app')
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const helper = require('./blog_test_helper')
-
 const api = supertest(app)
+let token = null
 
 // Before each test, this method will run and reset the database
 beforeEach(async () => {
@@ -21,15 +21,18 @@ beforeEach(async () => {
   await Promise.all(promiseBlogs)
 
   console.log('Database Initialised')
+
+  const res = await api.post('/api/login').send({ username: 'root', password: 'secret' })
+  token = res.body.token
+
+  console.log(`Successfully logged in, token: ${token}`)
 })
 
 
-test.only('blogs are returned as json', async () => {
+test('blogs are returned as json', async () => {
   await api.get('/api/blogs')
     .expect(200)
     .expect('Content-Type', /application\/json/)
-
-  console.log( await api.get('/api/blogs') )
 })
 
 test('there are two blogs', async () => {
@@ -42,9 +45,11 @@ test('.id value is defined in a blog', async () => {
   expect(res.body[0].id).toBeDefined()
 })
 
-test('a valid blog can be added', async () => {
+test.only('a valid blog can be added', async () => {
+
 
   await api.post('/api/blogs')
+    .set('Authorization', `bearer ${token}`)
     .send(helper.newBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/)

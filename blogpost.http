@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkJyYW5vZG5saW04ODkwIiwiaWQiOiI2MDZhY2U2MGEyMzJjMmFkMWExNGRhZjYiLCJpYXQiOjE2MTc2OTEwNDZ9.v7zqs_v5MQA-9jJdwF67zRO884RExcV7a3VV5ZnlXt8
+
+{
+  "title": "This is test with the user",
+  "author": "Nodnarb",
+  "url": "http://facebook.com"
+}

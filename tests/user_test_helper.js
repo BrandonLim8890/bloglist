@@ -1,7 +1,7 @@
 const initialUsers = [
   {
     username: 'root',
-    passwordHash: 'secret'
+    password: 'secret'
   }
 ]
 
