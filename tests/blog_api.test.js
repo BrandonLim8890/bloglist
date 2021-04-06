@@ -25,7 +25,7 @@ beforeEach(async () => {
   const res = await api.post('/api/login').send({ username: 'root', password: 'secret' })
   token = res.body.token
 
-  console.log(`Successfully logged in, token: ${token}`)
+  console.log('Successfully logged in with token')
 })
 
 
@@ -45,9 +45,7 @@ test('.id value is defined in a blog', async () => {
   expect(res.body[0].id).toBeDefined()
 })
 
-test.only('a valid blog can be added', async () => {
-
-
+test('a valid blog can be added', async () => {
   await api.post('/api/blogs')
     .set('Authorization', `bearer ${token}`)
     .send(helper.newBlog)
@@ -61,11 +59,22 @@ test.only('a valid blog can be added', async () => {
   expect(titles).toContain('CSGO vs Valorant')
 })
 
+test('a valid blog is blocked if the token is wrong or not present', async () => {
+  await api.post('/api/blogs')
+    .send(helper.newBlog)
+    .expect(401)
+    .expect('Content-Type', /application\/json/)
+  
+  const res = await api.post('/api/blogs').send(helper.newBlog)
+  expect(res.error).toBeDefined()
+})
+
 test('if likes is undefined, the blog default value is 0', async () => {
   // eslint-disable-next-line no-unused-vars
   const {likes, ...newBlog} = helper.newBlog
 
   await api.post('/api/blogs')
+    .set('Authorization', `bearer ${token}`)
     .send(newBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/)
@@ -81,6 +90,7 @@ test('returns 400 Bad Request when an invalid blog is added', async () => {
   const {title, author, ...newBlog} = helper.newBlog
 
   await api.post('/api/blogs')
+    .set('Authorization', `bearer ${token}`)
     .send(newBlog)
     .expect(400)
     .expect('Content-Type', /application\/json/)
