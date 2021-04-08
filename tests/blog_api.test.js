@@ -67,6 +67,16 @@ test('a valid blog is blocked if the token is wrong or not present', async () =>
   
   const res = await api.post('/api/blogs').send(helper.newBlog)
   expect(res.error).toBeDefined()
+
+  await api.post('/api/blogs')
+    .set('Authorization', 'bearer 123971623908ysdhafgasdf')
+    .send(helper.newBlog)
+    .expect(401)
+    .expect('Content-Type', /application\/json/)
+  
+  const res2 = await api.post('/api/blogs').send(helper.newBlog)
+  expect(res2.error).toBeDefined()
+
 })
 
 test('if likes is undefined, the blog default value is 0', async () => {
@@ -103,6 +113,7 @@ test('successfully deletes the first blog', async () => {
   const blogObject = await Blog.find({author: 'Dondon'})
   
   await api.delete(`/api/blogs/${blogObject[0].id}`)
+    .set('Authorization', `bearer ${token}`)
     .expect(204)
 
   const res = await api.get('/api/blogs')

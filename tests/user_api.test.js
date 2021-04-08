@@ -4,7 +4,6 @@ const supertest = require('supertest')
 const app = require('../app')
 const User = require('../models/user')
 const helper = require('./user_test_helper')
-let token = null
 
 const api = supertest(app)
 
