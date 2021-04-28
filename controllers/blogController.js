@@ -40,7 +40,7 @@ blogRouter.post('/', middleware.userExtractor, async (req, res, next) => {
     const savedBlog = await newBlog.save()
 
     await user.save()
-    res.status(201).json(savedBlog)
+    res.status(201).json(savedBlog.populate('user', { username: 1, name: 1 }))
   } catch (err) {
     next(err)
   }
@@ -65,11 +65,11 @@ blogRouter.delete('/:id', middleware.userExtractor, async (req, res, next) => {
   }
 })
 
-blogRouter.put('/:id', async (req, res, next) => {
+blogRouter.put('/:id', middleware.userExtractor, async (req, res, next) => {
   try {
     const body = req.body
 
-    const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, body, { new: true })
+    const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, body, { new: true }).populate('user', { username: 1, name: 1 })
     res.status(200).json(updatedBlog)
   } catch (err) {
     next(err)
