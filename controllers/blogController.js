@@ -39,8 +39,11 @@ blogRouter.post('/', middleware.userExtractor, async (req, res, next) => {
 
     const savedBlog = await newBlog.save()
 
+    user.blogs = user.blogs.concat(savedBlog.id)
+
     await user.save()
-    res.status(201).json(savedBlog.populate('user', { username: 1, name: 1 }))
+    await savedBlog.populate('user', { username: 1, name: 1 }).execPopulate()
+    res.status(201).json(savedBlog)
   } catch (err) {
     next(err)
   }
@@ -54,7 +57,7 @@ blogRouter.delete('/:id', middleware.userExtractor, async (req, res, next) => {
       res.status(401).json({ error: 'user invalid or missing' })
     }
 
-    const blog  = await Blog.findById(req.params.id)
+    const blog = await Blog.findById(req.params.id)
     if (blog.user.toString() !== user.id.toString()) {
       res.status(401).json({ error: 'user does not have access to this resource' })
     }
